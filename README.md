@@ -2,12 +2,14 @@
 Repository for code to analyze Medicare utilization and outcomes following billion dollar weather disasters
 
 Data Used:
+
 -Medicare MBSF file - to identify sample, get death information (not publicly available)
 -Medicare Inpatient & Outpatient claims - to get ED visits and urgent/emergent hospitalizations (not publicly available)
 -2015 Area Health Resource File - for county characteristics (publicly available: https://data.hrsa.gov/data/download)
 -Billion Dollar Weather Disasters and Counties from SHELDUS - establishes counties affected by each disaster and disaster start date to determine time periods for analysis (not publicly available) 
 
 Brief Description of Programs:
+
 0a_prep for matching.sas : Creates file of all counties eligible to be selected as controls
 0b_county_event_matching.R : Assigns up to 5 control counties for each affected county
 0c_define_time_periods.sas : Formats county-event lists with pre/post records for each time period, adds in beneficiary count to be used for bene-day offset in models  
