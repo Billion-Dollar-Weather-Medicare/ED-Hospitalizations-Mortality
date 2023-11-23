@@ -1,0 +1,107 @@
+---
+title: "County Matching - Exact on Region and RUCA"
+output:
+  word_document
+---
+
+```{r set-options, echo=FALSE, cache=FALSE}
+options(width = 100)
+```
+
+```{r setup, include=FALSE}
+ptStart <- proc.time()
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=FALSE, message=FALSE }
+library(cobalt)
+library(tableone)
+library(Matching)
+library(MatchIt)
+library(tidyr)
+library(dplyr)
+library(magrittr)
+```
+
+**Run Matching by Event**
+```{r, echo=FALSE, message=FALSE}
+run_matching <- function(event){
+  infile_name <- paste("county_prematch_", event, ".csv", sep="")
+  mydata <- read.csv(infile_name)
+  
+  ## MatchIt
+  m.out <- matchit(Affected ~ 0,
+                   data=mydata,
+                   method = "nearest",
+                   replace=FALSE,
+                   exact=c("census_region", "Primary_RUCA_Code_2010"),
+                   m.order="random",
+                   ratio=5,
+                   caliper=0.2)
+  
+  matched <- match.data(m.out)
+
+  cat(paste("Matched Summary - ", event, "\n", sep = ""))
+  print(m.out$nn)
+  
+  matched_file <- paste("county_matched_", event, ".csv", sep="")
+  write.csv(matched, file = matched_file)
+  
+  ## matched pairs
+  pairs <- data.frame(Affected=mydata[row.names(m.out$match.matrix),"County_FIPS"],Control=mydata[m.out$match.matrix,"BENE_ID"])
+  pairs_file <- paste("county_matchedpair_", event, ".csv", sep="")
+  write.csv(pairs, file = pairs_file)
+}
+
+run_matching(19)
+run_matching(22)
+run_matching(23)
+run_matching(25)
+run_matching(21)
+run_matching(27)
+run_matching(24)
+run_matching(28)
+run_matching(29)
+run_matching(30)
+run_matching(32)
+run_matching(33)
+run_matching(34)
+run_matching(36)
+run_matching(38)
+run_matching(39)
+run_matching(40)
+run_matching(41)
+run_matching(43)
+run_matching(44)
+run_matching(45)
+run_matching(46)
+run_matching(47)
+run_matching(48)
+run_matching(49)
+run_matching(50)
+run_matching(52)
+run_matching(53)
+run_matching(54)
+run_matching(55)
+run_matching(56)
+run_matching(57)
+run_matching(58)
+run_matching(60)
+run_matching(61)
+run_matching(62)
+run_matching(63)
+run_matching(64)
+run_matching(65)
+run_matching(68)
+run_matching(69)
+run_matching(70)
+
+```
+
+
+The time it took to knit this file from beginning to end is about (seconds):
+
+```{r}
+proc.time() - ptStart
+```
